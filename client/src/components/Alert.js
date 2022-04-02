@@ -4,10 +4,10 @@ import Stack from '@mui/material/Stack'
 import { useAppContext } from '../context/appContext'
 
 const BasicAlert = () => {
-  //   const { alertType, alertText } = useAppContext()
+  const { alertType, alertText } = useAppContext()
   return (
     <Stack sx={{ width: '100%' }} spacing={2}>
-      <Alert severity="error">Error</Alert>
+      <Alert severity={alertType}>{alertText}</Alert>
     </Stack>
   )
 }

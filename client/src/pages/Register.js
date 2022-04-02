@@ -6,11 +6,12 @@ import TextField from '@mui/material/TextField'
 import Link from '@mui/material/Link'
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
-// import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
+import { useNavigate } from 'react-router-dom'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import BasicAlert from '../components/Alert'
+import { useAppContext } from '../context/appContext'
 
 function Copyright(props) {
   return (
@@ -37,20 +38,46 @@ const initialState = {
   email: '',
   password: '',
   isMember: true,
-  showAlert: false,
 }
 
 export default function Register() {
-  const [value, setValues] = useState(initialState)
+  const [value, setValue] = useState(initialState)
+  const navigate = useNavigate()
+  //global state
+  const { user, isLoading, showAlert, displayAlert, registerUser, loginUser } =
+    useAppContext()
+
+  const toggleMember = () => {
+    setValue({ ...value, isMember: !value.isMember })
+  }
 
   const handleChange = (e) => {
-    console.log(e.target)
+    setValue({ ...value, [e.target.name]: e.target.value })
   }
 
   const onSubmit = (e) => {
     e.preventDefault()
-    console.log(e.target)
+    const { name, email, password, isMember } = value
+    if (!password || !email || (!isMember && !name)) {
+      displayAlert()
+      return
+    }
+    const currentUser = { name, email, password }
+    if (isMember) {
+      loginUser(currentUser)
+    } else {
+      registerUser(currentUser)
+    }
+    // console.log(value)
   }
+
+  useEffect(() => {
+    if (user) {
+      setTimeout(() => {
+        navigate('/staff')
+      })
+    }
+  }, [user, navigate])
 
   return (
     <ThemeProvider theme={theme}>
@@ -68,21 +95,23 @@ export default function Register() {
             {/* <LockOutlinedIcon /> */}
           </Avatar>
           <Typography component="h1" variant="h5">
-            Register
+            {value.isMember ? 'Login' : 'Register'}
           </Typography>
-          {value.showAlert && <BasicAlert />}
-          <Box component="form" noValidate onSubmit={onSubmit} sx={{ mt: 3 }}>
+          {showAlert && <BasicAlert />}
+          <Box component="form" noValidate sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <TextField
-                  autoComplete="given-name"
-                  name="name"
-                  required
-                  fullWidth
-                  label="Name"
-                  value={value.name}
-                  onChange={handleChange}
-                />
+                {!value.isMember && (
+                  <TextField
+                    autoComplete="given-name"
+                    name="name"
+                    required
+                    fullWidth
+                    label="Name"
+                    // value={value.name}
+                    // onChange={handleChange}
+                  />
+                )}
               </Grid>
 
               <Grid item xs={12}>
@@ -111,15 +140,24 @@ export default function Register() {
               type="submit"
               fullWidth
               variant="contained"
+              disabled={isLoading}
               sx={{ mt: 3, mb: 2 }}
             >
-              Register
+              {value.isMember ? 'Login' : 'Register'}
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
-                  Already have an account? Sign in
-                </Link>
+                <Button type="button" onClick={toggleMember}>
+                  <Typography
+                    color="secondary"
+                    textTransform="none"
+                    variant="body2"
+                  >
+                    {value.isMember
+                      ? 'Not a member yet? Register'
+                      : 'Already a member? Login'}
+                  </Typography>
+                </Button>
               </Grid>
             </Grid>
           </Box>
