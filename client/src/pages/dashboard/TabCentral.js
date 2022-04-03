@@ -77,7 +77,7 @@ const TabsList = styled(TabsListUnstyled)`
 
 export default function TabCentral() {
   return (
-    <TabsUnstyled defaultValue={0}>
+    <TabsUnstyled defaultValue={0} sx={{ mt: 3 }}>
       <TabsList>
         <Tab>Add Staff</Tab>
         <Tab> All Staff</Tab>

@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import TabCentral from './pages/dashboard/TabCentral.js'
+import AddStaff from './pages/dashboard/AddStaff.js'
+import AllStaff from './pages/dashboard/AllStaff.js'
 import Login from './pages/index.js'
 import ProtectedRoute from './pages/ProtectedRoute.js'
 
@@ -15,7 +16,16 @@ function App() {
           path="/staff"
           element={
             <ProtectedRoute>
-              <TabCentral />
+              <AddStaff />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          exact
+          path="/staff/all"
+          element={
+            <ProtectedRoute>
+              <AllStaff />
             </ProtectedRoute>
           }
         />

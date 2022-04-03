@@ -75,7 +75,7 @@ export default function Register() {
     if (user) {
       setTimeout(() => {
         navigate('/staff')
-      })
+      }, 3000)
     }
   }, [user, navigate])
 

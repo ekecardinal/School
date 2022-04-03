@@ -12,6 +12,7 @@ import Container from '@mui/material/Container'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import BasicAlert from '../../components/Alert'
 import { useAppContext } from '../../context/appContext'
+import CenteredTabs from './Tabs'
 
 const theme = createTheme()
 
@@ -33,10 +34,10 @@ function AddStaff() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    // if (!staffName || !subject || !date || !level || !salary) {
-    //   displayAlert()
-    //   return
-    // }
+    if (!staffName || !subject || !date || !level || !salary) {
+      displayAlert()
+      return
+    }
     if (isEditing) {
       editStaff()
       return
@@ -51,6 +52,7 @@ function AddStaff() {
   }
   return (
     <ThemeProvider theme={theme}>
+      <CenteredTabs />
       <Container component="main" maxWidth="sm">
         <CssBaseline />
         <Box

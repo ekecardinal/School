@@ -16,6 +16,9 @@ import {
   GET_STAFFS_BEGIN,
   GET_STAFFS_SUCCESS,
   SET_EDIT_STAFF,
+  EDIT_STAFF_BEGIN,
+  EDIT_STAFF_SUCCESS,
+  EDIT_STAFF_ERROR,
   DELETE_STAFF,
 } from './action'
 
@@ -170,6 +173,31 @@ const reducer = (state, action) => {
 
   if (action.type === DELETE_STAFF) {
     return { ...state, isLoading: true }
+  }
+
+  if (action.type === EDIT_STAFF_BEGIN) {
+    return {
+      ...state,
+      isLoading: true,
+    }
+  }
+  if (action.type === EDIT_STAFF_SUCCESS) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: 'success',
+      alertText: 'Job Updated!',
+    }
+  }
+  if (action.type === EDIT_STAFF_ERROR) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: 'error',
+      alertText: action.payload.msg,
+    }
   }
 
   throw new Error(`no such action:${action.type}`)

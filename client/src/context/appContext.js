@@ -19,6 +19,9 @@ import {
   GET_STAFFS_BEGIN,
   GET_STAFFS_SUCCESS,
   SET_EDIT_STAFF,
+  EDIT_STAFF_BEGIN,
+  EDIT_STAFF_SUCCESS,
+  EDIT_STAFF_ERROR,
   DELETE_STAFF,
 } from './action'
 
@@ -198,14 +201,34 @@ const AppProvider = ({ children }) => {
     dispatch({ type: SET_EDIT_STAFF, payload: { id } })
   }
 
-  const editStaff = () => {
-    console.log('edit job')
+  const editStaff = async () => {
+    dispatch({ type: EDIT_STAFF_BEGIN })
+
+    try {
+      const { staffName, subject, date, level, salary } = state
+      await authFetch.patch(`/staff/${state.editStaddId}`, {
+        staffName,
+        subject,
+        date,
+        level,
+        salary,
+      })
+      dispatch({ type: EDIT_STAFF_SUCCESS })
+      dispatch({ type: CLEAR_VALUES })
+    } catch (error) {
+      if (error.response.status === 401) return
+      dispatch({
+        type: EDIT_STAFF_ERROR,
+        payload: { msg: error.response.data.msg },
+      })
+    }
+    clearAlert()
   }
 
   const deleteStaff = async (staffId) => {
     dispatch({ type: DELETE_STAFF })
     try {
-      await authFetch.delete(`/staff/${staffId}`)
+      await authFetch.delete(`/staff/all/${staffId}`)
       getStaffs()
     } catch (error) {
       console.log(error.response)

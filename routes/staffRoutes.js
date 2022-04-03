@@ -9,6 +9,6 @@ import {
 } from '../controllers/staffControllers.js'
 
 router.route('/').post(createStaff).get(getAllStaff)
-router.route('/:id').delete(deleteStaff).patch(upDateStaff)
-
+router.route('/all/:id').delete(deleteStaff)
+router.route('/:id').patch(upDateStaff)
 export default router

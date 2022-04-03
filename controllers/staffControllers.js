@@ -38,6 +38,7 @@ const upDateStaff = async (req, res) => {
 }
 const deleteStaff = async (req, res) => {
   const { id: staffId } = req.params
+  const staff = await Staff.findOne({ _id: staffId })
   if (!staff) {
     throw new CustomAPIError.NotFoundError(`No staff with id: ${staffId}`)
   }
